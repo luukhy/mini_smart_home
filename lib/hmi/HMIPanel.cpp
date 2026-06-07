@@ -1,9 +1,9 @@
 #include <Arduino.h>
 #include "HMIPanel.h"
 
-HMIPanel::HMIPanel(hmi_page page_mode, LiquidCrystal* lcd, int switch_pin) 
+HMIPanel::HMIPanel(hmi_page page_mode, LiquidCrystal* lcd) 
     : m_page(page_mode), m_lcd(lcd), m_lights_level(0), 
-      m_temperature(0), m_humidity(0), m_switch_pin(switch_pin) 
+      m_temperature(0), m_humidity(0) 
 {}
 
 HMIPanel::~HMIPanel() {}
@@ -18,6 +18,13 @@ void HMIPanel::display() {
             break;
             
         case ENV:
+            m_lcd->setCursor(0, 0);
+            m_lcd->print("Humidity: ");
+            m_lcd->print(m_humidity);
+
+            m_lcd->setCursor(0, 1);
+            m_lcd->print("Temperature: ");
+            m_lcd->print(m_temperature);
             break;
 
         default:
@@ -31,11 +38,3 @@ void HMIPanel::nextPage() {
 
     display();
 }
-
-void HMIPanel::setTemperature(int temperature) { m_temperature = temperature; }
-void HMIPanel::setLightsLevel(int lights_level) { m_lights_level = lights_level; }
-void HMIPanel::setHumidity(int humidity) { m_humidity = humidity; }
-
-int HMIPanel::getTemperature() const { return m_temperature; }
-int HMIPanel::getHumidity() const    { return m_humidity; }
-int HMIPanel::getLightsLevel() const { return m_lights_level; }
