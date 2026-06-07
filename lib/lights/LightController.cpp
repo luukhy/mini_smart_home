@@ -1,6 +1,6 @@
 #include "LightController.h"
 
-LightController::LightController(int pin) : m_pin(pin), m_state(false), m_duty_cycle(126) {}
+LightController::LightController(int pin) : m_pin(pin), m_state(false), m_duty_cycle(50) {}
 
 void LightController::init() {
     pinMode(m_pin, OUTPUT);
@@ -13,9 +13,22 @@ void LightController::toggle() {
 }
 
 void LightController::setBrightness(int pwmValue) {
+    
+    if (!m_state) {
+        return;
+    }
     m_duty_cycle += pwmValue;
-    if (m_duty_cycle > 255) m_duty_cycle = 255;
+
+    if (m_duty_cycle > 250) m_duty_cycle = 250;
     if (m_duty_cycle < 50) m_duty_cycle = 50;
     
     analogWrite(m_pin, m_duty_cycle);
+}
+
+int LightController::getBrightness() {
+    if (!m_state) {
+        return 0;
+    } else {
+        return m_duty_cycle/250.0 * 100;
+    }
 }

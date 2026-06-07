@@ -13,7 +13,7 @@ private:
     unsigned long m_last_click_time;
 
 public:
-    Button(int pin, unsigned long debounceDelay = 50, unsigned long windowTime = 300);
+    Button(int pin, unsigned long debounceDelay = 50, unsigned long windowTime = 450);
     
     void init();
 

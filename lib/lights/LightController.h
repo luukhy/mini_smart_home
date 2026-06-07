@@ -15,4 +15,6 @@ public:
     void toggle();
     
     void setBrightness(int pwmValue);
+    
+    int getBrightness();
 };
