@@ -18,6 +18,13 @@ void HMIPanel::display() {
             break;
             
         case ENV:
+            m_lcd->setCursor(0, 0);
+            m_lcd->print("Humidity: ");
+            m_lcd->print(m_humidity);
+
+            m_lcd->setCursor(0, 1);
+            m_lcd->print("Temperature: ");
+            m_lcd->print(m_temperature);
             break;
 
         default:
