@@ -1,38 +1,32 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>
 
-const int rs = 13;
-const int en = 14;
-const int d4 = 27;
-const int d5 = 26;
-const int d6 = 25;
-const int d7 = 33;
+#include "HMIPanel.h"
 
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+const int RS = 13;
+const int EN = 14;
+const int D4 = 27;
+const int D5 = 26;
+const int D6 = 25;
+const int D7 = 33;
+
+const int HMI_SWITCH_IN_PIN = 32;
+
+LiquidCrystal lcd(RS, EN, D4, D5, D6, D7);
+HMIPanel hmi_panel(LIGHTS, &lcd, HMI_SWITCH_IN_PIN);
+
 
 void setup() {
   Serial.begin(115200);
-  Serial.println("Inicjalizacja LCD...");
+  lcd.begin(16, 2);  
 
-  lcd.begin(16, 2);
-  lcd.clear();
+  pinMode(HMI_SWITCH_IN_PIN, INPUT_PULLUP);
 
-  lcd.setCursor(0, 0);
-  lcd.print("Smart Home:");
-  
-  lcd.setCursor(0, 1);
-  lcd.print("System Gotowy!");
+  hmi_panel.display();
 }
 
 void loop() {
-  delay(1000);
-  lcd.setCursor(14, 1);
-  lcd.print(".");
-  delay(1000);
-  lcd.setCursor(15, 1);
-  lcd.print(".");
-  delay(1000);
-  
-  lcd.setCursor(14, 1);
-  lcd.print("  "); 
+  hmi_panel.display();
+  Serial.println(digitalRead(HMI_SWITCH_IN_PIN));
+  delay(2000);
 }
