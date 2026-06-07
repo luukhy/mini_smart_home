@@ -9,7 +9,7 @@
 #include "HMIPanel.h"
 
 const int RS = 13, EN = 14, D4 = 27, D5 = 26, D6 = 25, D7 = 33;
-const int HMI_SWITCH_IN_PIN = 32;
+const int CONST_HMI_BUTTON = 32;
 
 const int DHTPIN = 22;
 const uint8_t DHTTYPE = DHT11;
@@ -18,8 +18,10 @@ const int CONST_POWER_PIN = 15;
 const int CONST_BUTTON_PIN1 = 4;
 const int CONST_LED_PIN1 = 16;
 
-Button LightSwitch(CONST_BUTTON_PIN1);
-LightController roomLight(CONST_LED_PIN1);
+Button light_switch(CONST_BUTTON_PIN1);
+Button hmi_button(CONST_HMI_BUTTON);
+
+LightController room_light(CONST_LED_PIN1);
 LiquidCrystal lcd(RS, EN, D4, D5, D6, D7);
 HMIPanel hmi_panel(LIGHTS, &lcd);
 DHT dht(DHTPIN, DHTTYPE);
@@ -35,21 +37,19 @@ void setup() {
   Serial.begin(115200);
   lcd.begin(16, 2);  
   dht.begin();
-  pinMode(HMI_SWITCH_IN_PIN, INPUT_PULLUP);
+  pinMode(CONST_HMI_BUTTON, INPUT_PULLUP);
 
 
-  Serial.begin(115200);
   pinMode(CONST_POWER_PIN, OUTPUT);
   digitalWrite(CONST_POWER_PIN, HIGH); 
-  LightSwitch.init();
-  roomLight.init();
+  light_switch.init();
+  room_light.init();
 
   hmi_panel.display();
 }
 
 void loop() {
-  int value = debounce(HMI_SWITCH_IN_PIN, button_state, last_button_state, last_debounce_time, CONST_DEBOUNCE_DELAY);
-  if(value) {
+  if(hmi_button.isPressed()) {
     hmi_panel.nextPage();
   }
 
@@ -71,13 +71,13 @@ void loop() {
             Serial.println("Blad odczytu z DHT11!");
         }
     }
-  int mainClickType = LightSwitch.checkClicks();
-  if (mainClickType == 1) {
-      roomLight.toggle();
-  } else if (mainClickType == 2) {
-      roomLight.setBrightness(100);
-  } else if (mainClickType == 3) {
-      roomLight.setBrightness(-100);
+  int main_click_type = light_switch.checkClicks();
+  if (main_click_type == 1) {
+      room_light.toggle();
+  } else if (main_click_type == 2) {
+      room_light.setBrightness(100);
+  } else if (main_click_type == 3) {
+      room_light.setBrightness(-100);
   }
 
 }
