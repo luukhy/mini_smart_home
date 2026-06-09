@@ -29,14 +29,16 @@ void HMIPanel::display() {
     switch (m_page) {
         case LIGHTS:
             m_lcd->setCursor(0, 0);
-            m_lcd->print("Light level: ");
+            m_lcd->print("Lights: ");
             m_lcd->print(m_lights_level);
+            m_lcd->print("%");
             break;
             
         case ENV:
             m_lcd->setCursor(0, 0);
             m_lcd->print("Humidity: ");
             m_lcd->print(m_humidity);
+            m_lcd->print("%");
 
             m_lcd->setCursor(0, 1);
             m_lcd->print("Temperature: ");

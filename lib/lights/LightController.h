@@ -13,7 +13,10 @@ public:
     void init();
     
     void toggle();
+    void on();
+    void off();
     
+    void adjustBrightness(int stepValue);
     void setBrightness(int pwmValue);
     
     int getBrightness();
